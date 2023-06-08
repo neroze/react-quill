@@ -6,7 +6,7 @@ if (typeof React !== 'object') {
   alert('React not found. Did you run "npm install"?');
 }
 
-if (typeof ReactQuill.ReactQuill == 'function') {
+if (typeof ReactQuill.ReactQuill !== 'function') {
   alert('ReactQuill not found. Did you run "make build"?');
 }
 
