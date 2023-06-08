@@ -8,8 +8,10 @@
 
 const React = require('react');
 const sinon = require('sinon');
-const ReactQuill = require('../lib/index');
-const { Quill } = require('../lib/index');
+let ReactQuill = require('../lib/index');
+
+ReactQuill = ReactQuill.Editor;
+const { Quill } = ReactQuill;
 
 const {
   mountReactQuill,
@@ -28,7 +30,7 @@ console.log(
 '
 );
 
-describe('<ReactQuill />', function() {
+describe('<ReactQuill />', function () {
   it('calls componentDidMount', () => {
     sinon.spy(ReactQuill.prototype, 'componentDidMount');
     const wrapper = mountReactQuill();
@@ -47,6 +49,7 @@ describe('<ReactQuill />', function() {
   it('attaches a Quill instance to the component', () => {
     const wrapper = mountReactQuill();
     const quill = getQuillInstance(wrapper);
+    console.log(quill);
     expect(quill instanceof Quill).to.equal(true);
   });
 
@@ -90,7 +93,7 @@ describe('<ReactQuill />', function() {
     expect(getQuillContentsAsHTML(wrapper)).to.equal(html);
   });
 
-  it('prevents using Delta changesets from events as value', done => {
+  it('prevents using Delta changesets from events as value', (done) => {
     const value = '<p>Hello, world!</p>';
     const changedValue = '<p>Adieu, world!</p>';
     let calledDone = false;
@@ -102,13 +105,14 @@ describe('<ReactQuill />', function() {
     };
     wrapper = mountReactQuill({ value, onChange });
 
-    const expectedErr = /You are passing the `delta` object from the `onChange` event back/;
+    const expectedErr =
+      /You are passing the `delta` object from the `onChange` event back/;
     // this test knows a lot about the implementation,
     // but we need to wrap the right function with a catch
     // in order to prevent errors from it from propagating
     const originalValidateProps = wrapper.instance().validateProps;
 
-    wrapper.instance().validateProps = function(props) {
+    wrapper.instance().validateProps = function (props) {
       try {
         originalValidateProps.call(wrapper.instance(), props);
       } catch (err) {
@@ -133,7 +137,7 @@ describe('<ReactQuill />', function() {
   it('calls onChange with the new value when Quill calls pasteHTML', () => {
     const onChangeSpy = sinon.spy();
     const inHtml = '<p>Hello, world!</p>';
-    const onChange = value => {
+    const onChange = (value) => {
       expect(inHtml).to.equal(value);
       onChangeSpy();
     };
@@ -146,7 +150,7 @@ describe('<ReactQuill />', function() {
   it('calls onChange with the new value when Quill calls insertText', () => {
     const onChangeSpy = sinon.spy();
     const inHtml = '<p><strong>Hello, World!</strong></p>';
-    const onChange = value => {
+    const onChange = (value) => {
       expect(inHtml).to.equal(value);
       onChangeSpy();
     };

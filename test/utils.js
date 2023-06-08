@@ -1,6 +1,21 @@
 var React = require('react');
 var { mount } = require('enzyme');
-var ReactQuill = require('../lib/index');
+var ReactQuillInstance = require('../lib/index');
+var ReactQuill = ReactQuill.Editor;
+
+/**
+ * Render ReactQuill using new Hook
+ */
+
+function App() {
+  const { value, editor } = ReactQuillInstance.useReactQuill();
+  return (
+    <div>
+      <p>{editor}</p>
+      <p className="editor-value">{value}</p>
+    </div>
+  );
+}
 
 function ReactQuillNode(props, children) {
   props = Object.assign(
